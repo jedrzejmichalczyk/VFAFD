@@ -1,0 +1,277 @@
+% IMS_modify_IEEEtran_18b_CTAN_V4c.tex
+%         created by Causal Productions Pty Ltd, 
+%	  http://www.causalproductions.com
+%	  info@causalproductions.com
+%
+%	  This file is Copyright 2017-2019 Causal Productions Pty Ltd.
+%	  Permission is granted to use this file and its associated files
+%	  for conferences for which Causal Productions has been contracted
+%	  to prepare the conference proceedings.
+%
+% This file contains format modifications to the standard IEEE style file
+% called IEEEtran.cls version 1.8b, as hosted on CTAN at the following URL:
+%	http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
+%
+% The purpose of the format modifications is to implement a paper format
+% traditionally used by IMS conferences, which differs from the standard
+% IEEE conference paper format in various ways, such as font sizes.
+%  
+% This file is NOT intended to be used with the different IEEEtran.cls version 1.8
+% that is distributed by IEEE at the following URL:
+%	http://www.ieee.org/web/publications/pubservices/confpub/AuthorTools/conferenceTemplates.html
+% Despite having the same version number 1.8, the CTAN and IEEE versions are
+% different and this particular modification file is designed only for the 
+% CTAN version.
+%
+% HISTORY
+% 20180920 V3 first release for review
+% 20181009 V3c no change, version number bumped to match paper template file
+% 20191020 V4c changed section heading number-name spacing so that it is specified individually for
+%               section - use a fixed space between number and name
+%               subsection - make the name align with paragraph indentation
+%               subsubsection - make the name align with paragraph indentation
+%               paragraph - make the name align with paragraph indentation
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+
+\def\@IMSauthorblockNAMEstyle{\normalfont\IMSauthorsize}
+\def\@IMSauthorblockAFFILstyle{\normalfont\IMSaffilsize}
+\def\@IMSauthorblockEMAILstyle{\normalfont\IMSaffilsize}
+%
+\def\IMSauthorblockNAME#1{%
+\relax\@IMSauthorblockNAMEstyle%
+#1%
+}%
+\def\IMSauthorblockAFFIL#1{%
+\relax\@IMSauthorblockAFFILstyle%
+\vskip\@IEEEauthorblockAtopspace
+#1%
+}%
+\def\IMSauthorblockEMAIL#1{%
+\relax\@IMSauthorblockEMAILstyle%
+\vskip\@IEEEauthorblockAtopspace
+#1%
+}%
+%
+\newcommand{\IMSauthor}[1]{%
+\ifIsBlindReviewVersion%
+\author{\phantom{\parbox{\textwidth}{\center\relax#1}}}%
+\else%
+\author{\parbox{\textwidth}{\center\relax#1}}%
+\fi%
+}%
+%
+\newif\ifIsBlindReviewVersion
+\def\IMSthispaperforblindreview{\IsBlindReviewVersiontrue}
+\def\IMSthispaperforfinalpublication{\IsBlindReviewVersionfalse}
+%
+%
+%
+% IMS: override title block font sizes
+% formats the Title, authors names, affiliations and special paper notice
+% THIS IS A CONTROLLED SPACING COMMAND! Do not allow blank lines or unintentional
+% spaces to enter the definition - use % at the end of each line
+\def\@maketitle{\newpage
+\bgroup\par\addvspace{0.5\baselineskip}\centering%
+\ifCLASSOPTIONtechnote% technotes
+   {\bfseries\large\@IEEEcompsoconly{\sffamily}\@title\par}\vskip 1.3em{\lineskip .5em\@IEEEcompsoconly{\sffamily}\@author
+   \@IEEEspecialpapernotice\par{\@IEEEcompsoconly{\vskip 1.5em\relax
+   \@IEEEtitleabstractindextextbox{\@IEEEtitleabstractindextext}\par
+   \hfill\@IEEEcompsocdiamondline\hfill\hbox{}\par}}}\relax
+\else% not a technote
+   \vskip0.2em{\IMStitlesize\ifCLASSOPTIONtransmag\bfseries\LARGE\fi\@IEEEcompsoconly{\sffamily}\@IEEEcompsocconfonly{\normalfont\normalsize\vskip 2\@IEEEnormalsizeunitybaselineskip
+   \bfseries\Large}\@title\par}\vskip1.0em\par% CAUSAL PRODUCTIONS change on this line
+   % V1.6 handle \author differently if in conference mode
+   \ifCLASSOPTIONconference%
+      {\@IEEEspecialpapernotice\mbox{}\vskip\@IEEEauthorblockconfadjspace%
+       \mbox{}\hfill\begin{@IEEEauthorhalign}\@author\end{@IEEEauthorhalign}\hfill\mbox{}\par}\relax
+   \else% peerreviewca, peerreview or journal
+      \ifCLASSOPTIONpeerreviewca
+         % peerreviewca handles author names just like conference mode
+         {\@IEEEcompsoconly{\sffamily}\@IEEEspecialpapernotice\mbox{}\vskip\@IEEEauthorblockconfadjspace%
+          \mbox{}\hfill\begin{@IEEEauthorhalign}\@author\end{@IEEEauthorhalign}\hfill\mbox{}\par
+          {\@IEEEcompsoconly{\vskip 1.5em\relax
+           \@IEEEtitleabstractindextextbox{\@IEEEtitleabstractindextext}\par\hfill
+           \@IEEEcompsocdiamondline\hfill\hbox{}\par}}}\relax
+      \else% journal, peerreview or transmag
+         \ifCLASSOPTIONtransmag
+            % transmag also handles author names just like conference mode
+            % it also uses \@IEEEtitleabstractindextex, but with one line less
+            % space above, and one more below
+           {\@IEEEspecialpapernotice\mbox{}\vskip\@IEEEauthorblockconfadjspace%
+            \mbox{}\hfill\begin{@IEEEauthorhalign}\@author\end{@IEEEauthorhalign}\hfill\mbox{}\par
+           {\vspace{0.5\baselineskip}\relax\@IEEEtitleabstractindextextbox{\@IEEEtitleabstractindextext}\vspace{-1\baselineskip}\par}}\relax
+         \else% journal or peerreview
+           {\lineskip.5em\@IEEEcompsoconly{\sffamily}\sublargesize\@author\@IEEEspecialpapernotice\par
+           {\@IEEEcompsoconly{\vskip 1.5em\relax
+            \@IEEEtitleabstractindextextbox{\@IEEEtitleabstractindextext}\par\hfill
+            \@IEEEcompsocdiamondline\hfill\hbox{}\par}}}\relax
+         \fi
+      \fi
+   \fi
+\fi\par\addvspace{0.0\baselineskip}\egroup}% CAUSAL PRODUCTIONS change on this line, reduce the vspace from 0.5\baselineskip to 0.0
+
+% IMS: change font sizes in the document
+%	paper title is 24pt
+%	bib items are 9pt 
+%	author names are 11pt
+%	author affils are 10pt
+%	captions of figs and tables are 9pt
+\def\IMStitlesize{\@setfontsize{\IMStitlesize}{18}{21pt}}% CAUSAL PRODUCTIONS change on this line
+\def\IMSauthorsize{\@setfontsize{\IMSauthorsize}{12}{13pt}}% CAUSAL PRODUCTIONS change on this line
+\def\IMSaffilsize{\@setfontsize{\IMSaffilsize}{12}{13pt}}% CAUSAL PRODUCTIONS change on this line
+\def\IMScaptionsize{\@setfontsize{\IMScaptionsize}{8}{9pt}}% CAUSAL PRODUCTIONS change on this line
+\def\IMSbibsize{\@setfontsize{\IMSbibsize}{8}{9pt}}% CAUSAL PRODUCTIONS change on this line
+
+\def\@IEEEauthorblockNstyle{\IMSauthorsize\@IEEEcompsocnotconfonly{\sffamily}\@IEEEcompsocconfonly{\large}}%CAUSAL PRODUCTIONS removed sublargesize to get correct IMSauthorsize
+\def\@IEEEauthorblockAstyle{\IMSaffilsize\@IEEEcompsocnotconfonly{\sffamily}\@IEEEcompsocconfonly{\itshape}\@IEEEcompsocconfonly{\large}}%CAUSAL PRODUCTIONS removed normalsize to get correct IMSaffilsize
+% The default if the user does not use an author block
+\def\@IEEEauthordefaulttextstyle{\IMSauthorsize\@IEEEcompsocnotconfonly{\sffamily}\sublargesize}%CAUSAL PRODUCTIONS
+
+\def\thebibliography#1{\section*{\refname}%
+    \addcontentsline{toc}{section}{\refname}%
+    % V1.6 add some rubber space here and provide a command trigger
+    \IMSbibsize\@IEEEcompsocconfonly{\small}\vskip 0.3\baselineskip plus 0.1\baselineskip minus 0.1\baselineskip% CAUSAL PRODUCTIONS change on this line
+    \list{\@biblabel{\@arabic\c@enumiv}}%
+    {\settowidth\labelwidth{\@biblabel{#1}}%
+    \leftmargin\labelwidth
+    \advance\leftmargin\labelsep\relax
+    \itemsep \IEEEbibitemsep\relax
+    \usecounter{enumiv}%
+    \let\p@enumiv\@empty
+    \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+    \let\@IEEElatexbibitem\bibitem%
+    \def\bibitem{\@IEEEbibitemprefix\@IEEElatexbibitem}%
+\def\newblock{\hskip .11em plus .33em minus .07em}%
+% originally:
+%   \sloppy\clubpenalty4000\widowpenalty4000%
+% by adding the \interlinepenalty here, we make it more
+% difficult, but not impossible, for LaTeX to break within a reference.
+% IEEE almost never breaks a reference (but they do it more often with
+% technotes). You may get an underfull vbox warning around the bibliography, 
+% but the final result will be much more like what IEEE will publish. 
+% MDS 11/2000
+\ifCLASSOPTIONtechnote\sloppy\clubpenalty4000\widowpenalty4000\interlinepenalty100%
+\else\sloppy\clubpenalty4000\widowpenalty4000\interlinepenalty500\fi%
+    \sfcode`\.=1000\relax}
+
+% IMS: make a version of \@makecaption which uses \IMScaptionsize
+%	and which formats all figure captions as justified if long, centered if short,
+%	and formats all table captions using identical format to figure captions.
+%	We are discarding the archaic small-caps format of table captions which was so hard to read.
+%
+\long\def\@makecaption#1#2{%
+% test if is a for a figure or table
+%  if figure, must make a vertical space before caption to separate caption from figure content
+%  if table, must make a vertical space after caption to separate caption from table content
+\ifx\@captype\@IEEEtablestring%
+\par\@IEEEtabletopskipstrut% strut used to align table caption with facing column
+\else
+\@IEEEfigurecaptionsepspace
+\fi
+% 20180920 use IMScaptionsize, use two nonbreaking spaces, not one
+\setbox\@tempboxa\hbox{\normalfont\IMScaptionsize {#1.}\nobreakspace\nobreakspace #2}%
+\ifdim \wd\@tempboxa >\hsize%
+% if caption is longer than a line, let it wrap around
+\setbox\@tempboxa\hbox{\normalfont\IMScaptionsize {#1.}\nobreakspace\nobreakspace}%
+\parbox[t]{\hsize}{\normalfont\IMScaptionsize\noindent\unhbox\@tempboxa#2}%
+% if caption is shorter than a line, center if conference, left justify otherwise
+\else
+\ifCLASSOPTIONconference \hbox to\hsize{\normalfont\IMScaptionsize\hfil\box\@tempboxa\hfil}%
+\else \hbox to\hsize{\normalfont\IMScaptionsize\box\@tempboxa\hfil}%
+\fi\fi
+% test if is a for a figure or table
+%  if figure, must make a vertical space before caption to separate caption from figure content
+%  if table, must make a vertical space after caption to separate caption from table content
+\ifx\@captype\@IEEEtablestring%
+\@IEEEtablecaptionsepspace
+\else
+\fi}
+
+% IMS: define table-caption-to-table separation separately from figure-to-figure-caption separation
+\newlength\tablecaptiontotableskip
+\newlength\figuretocaptionskip
+% but only \abovecaptionskip is used above figure captions and *below* table
+% captions
+\setlength\tablecaptiontotableskip{0.5\baselineskip}% 0.5bs gives about 3mm from caption baseline to table
+\setlength\figuretocaptionskip{0.0\baselineskip}% 0bs gives about 3mm from figure to caption top of lc letters, which matches appearance of table.
+\def\@IEEEfigurecaptionsepspace{\vskip\figuretocaptionskip\relax}%
+\def\@IEEEtablecaptionsepspace{\vskip\tablecaptiontotableskip\relax}%
+
+% IMS: Use Michael Shells suggested fix to reduce the space around emdash following Abstract and Index Terms headings
+\def\abstract{\normalfont%
+\@IEEEabskeysecsize\bfseries\textit{\abstractname}\,\bfseries\textit{---}\,%
+\@IEEEgobbleleadPARNLSP}%
+\def\endabstract{\relax\vspace{0ex}\par%
+\normalfont\normalsize}%
+
+\def\IEEEkeywords{\normalfont%
+\@IEEEabskeysecsize\bfseries\textit{\IEEEkeywordsname}\,\bfseries\textit{---}\,%
+\@IEEEgobbleleadPARNLSP}%
+\def\endIEEEkeywords{\relax\vspace{0.67ex}%
+\par\if@twocolumn\else\endquotation\fi%
+\normalsize\normalfont}%
+
+
+%%%%%
+% Define \IMSauthorrefmark to allow more flexible marking than the \IEEEauthorrefmark command
+% The refmarks can now be a string of any length, of any characters.
+\DeclareRobustCommand*{\IMSauthorrefmark}[1]{\raisebox{0pt}[0pt][0pt]{\textsuperscript{\footnotesize{#1}}}}%
+%
+% CAUSAL PRODUCTIONS: No extra space between title and authors
+\def\@IEEEauthorblockNtopspace{0ex}
+% CAUSAL PRODUCTIONS: 1mm extra space between author names and affiliations
+\def\@IEEEauthorblockAtopspace{1mm}
+%
+%%%%%%%%%%%%%%%%%%%%%%
+%
+\setlength{\columnsep}{6.3mm}% IMS
+\def\tablename{Table}% IMS: was TABLE in IEEETran, but we are now using capitalized caption text not smallcaps
+\def\thetable{\arabic{table}}% IMS: Tables are numbered using arabic not roman
+\def\IEEEkeywordsname{Keywords}% use Keywords instead of Index Terms
+%
+%%%%%%%%%%%%%%%%%%%%%%
+%
+\def\subsubsection{\@startsection{subsubsection}{3}{\z@}{1.5ex plus 1.5ex minus 0.5ex}%
+{0.7ex plus .5ex minus 0ex}{\normalfont\normalsize\itshape}}%
+%
+%%%%%%%%%%%%%%%%%%%%%%
+%
+\setlength{\parindent}{1.5em}% make the default para indent larger to match WORD template
+%
+% 20191023 we remove the V3c indentation of section headings to match paragraph indentation, 
+% and revert to the original IEEE section heading style without spacing, and the spacing is
+% now done individually for the 4 levels, below.
+\def\@seccntformat#1{\csname the#1dis\endcsname\relax}% moved the spacer \hskip 0.5em to individual handlers below
+%
+% The following are copied from IEEEtran.cls line 2585 and modified here
+\def\thesectiondis{\thesection.\hskip 0.5em}%					I.	% CAUSAL PRODUCTIONS: moved the hskip spacer from \@seccntformat to here
+\def\thesubsectiondis{{\hbox to\parindent{\Alph{subsection}.}}}%		B.	% CAUSAL PRODUCTIONS: indent the subsection name to match paragraph indent
+\def\thesubsubsectiondis{{\hbox to \parindent{\arabic{subsubsection})}}}%	3)	% CAUSAL PRODUCTIONS: indent the subsubsection name to match paragraph indent
+\def\theparagraphdis{{\hbox to \parindent{\alph{paragraph})}}}%			d)	% CAUSAL PRODUCTIONS: indent the subsubsubsection name to match paragraph indent
+%
+% now we redefine the list indents so they take the new value of \parindent
+\IEEEilabelindentA \parindent
+\IEEEilabelindent \IEEEilabelindentA
+\IEEEelabelindent \parindent
+\IEEEdlabelindent \parindent
+\IEEElabelindent \parindent
+%%%%%%%%%%%%%%%%%%%%%%
+
+\newlength\@IMSparindent
+\setlength{\@IMSparindent}{\parindent}
+
+\newcommand\IMSdisplayacksection[1]{%
+\ifIsBlindReviewVersion%
+%\noindent\phantom{\parbox[t]{\columnwidth}{\normalbaselines\setlength{\parindent}{\@IMSparindent}#1\strut}}%\IMSacktext
+\noindent\phantom{\parbox[t]{\columnwidth}{\normalbaselines\setlength{\parindent}{\@IMSparindent}{#1}\strut}}%\IMSacktext
+\else%
+\noindent\parbox[t]{\columnwidth}{\normalbaselines\setlength{\parindent}{\@IMSparindent}{#1}\strut}%
+\fi%
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatother
+

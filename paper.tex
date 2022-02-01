@@ -1,0 +1,208 @@
+%
+% IMS Conference Sample Paper
+% 
+% HISTORY
+% 20180920 V3 first release for review
+% 20180924 V3b minor text changes regarding hiding text for blind review
+% 20181009 V3c - boldfaced the warning to not use old papers as templates
+%              - increased fig 1 size
+%              - changed example keywords for RFIC
+% 20191020 V4c - TPC supplied new text with added emphasis concerning the process
+%                of preparing papers for double-blind peer review.
+%              - tiny adjustment of side margins
+%              - developed strategy for using template with XeTeX/LuaTeX and pdfLaTeX to
+%                in recent TeXLive installations
+%              - replaced fig 1 with new graph
+%              - replaced fig 2 with new IC die photos
+%              - added Figure Label (eg (a) (b) for subfigures) font spec to table 1
+%              - minor formatting changes
+%              - minor text changes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We first setup margins for IMS papers on USL paper.  This is done 
+% before the \documentclass is invoked.
+%
+\newcommand{\CLASSINPUTtoptextmargin}{0.75in}%
+\newcommand{\CLASSINPUTbottomtextmargin}{1in}%
+\newcommand{\CLASSINPUTinnersidemargin}{0.63in}%
+\newcommand{\CLASSINPUToutersidemargin}{0.63in}%
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% requires IEEEtran V1.8+, as hosted on CTAN at the following URL:
+%	http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
+%
+\documentclass[journal]{IEEEtran}% 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Now we import required packages
+%
+\usepackage[utf8]{inputenc} %added
+\usepackage[T1]{fontenc}    %added
+\usepackage{xcolor}
+\usepackage{amsmath}% for double integral symbol in this template
+\usepackage{amssymb}% for double integral symbol in this template
+\usepackage{graphicx}% for figures
+\usepackage{tikz,pgfplots}% for figures
+\pgfplotsset{compat=1.16}
+\usepackage{booktabs}% for figures
+\usepackage{multirow}% to allow multiple-row elements in tabular environment
+\usepackage[none]{hyphenat}% turn off hyphenation to make text extraction and indexing easier
+\usepackage{float}% better control of floating figures and tables
+\usepackage{subfig}% for subfigures within figures
+\usepackage{dblfloatfix}% fix to allow page-wide floats at bottom of page
+\usepackage{epstopdf}
+\usepackage{braket}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% users of pdfLaTeX must uncomment the following lines:
+\usepackage{t1enc}% allows access to various special characters
+\usepackage{times}% change font to Nimbus Roman (based on Times Roman)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% users of XeLaTeX or LuaTeX must uncomment the following two lines:
+% \usepackage{fontspec}% needed to change main font
+% \setmainfont{TeX Gyre Termes}% change font to TeX Gyre Roman (based on Times Roman)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Next we modify the standard IEEEtran.cls format to produce IMS format by 
+% redefining some macros.
+\input{IMS_modify_IEEEtran_18b_CTAN_V4c}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\newcommand{\IMSeventname}{IMS}% or RFIC or IMS
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\inner}[2]{\braket{#1,#2}}
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% We use \raggedbottom to avoid latex adding vertical space around headings.
+% This gives a better idea to the author about how much white space remains
+% as the page limit is approached.
+\raggedbottom
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PAPER TITLE AND AUTHOR BLOCK
+%
+% The paper title can use linebreaks \\ within to get better formatting if desired.
+%
+\title{Coupling Matrix Extraction by Numerical Solving of Polynomial Systems by Homotopy Continuation}
+%
+\author{Jedrzej~Michalczyk,~\IEEEmembership{Member,~IEEE,}
+        Jerzy~Julian~Michalski,~\IEEEmembership{Senior Member,~IEEE,}
+}
+
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+coupling matrix extraction, microwave filters, Groebner basis, homotopy continuation.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\section{AFD}
+\begin{equation}\label{eq:Takenada}
+  B_{n} = \frac{\sqrt{1 - |a_n|^2}}{1 - z\conj{a_n}}\prod_{k=1}^{n-1}{\frac{z - a_k}{1 - z\conj{a}}}
+\end{equation}
+System from~\eqref{eq:Takenada} is called the Takenada-Malmquist system.
+\begin{equation}\label{eq:fproj}
+  f = \sum_{k=1}^{\infty} \inner{f_k}{u_k} u_k
+\end{equation}
+
+\begin{equation}
+   \mathcal{D} = \left\{ e_a(z) = \frac{\sqrt{1 - |a|^2}}{1 - z\conj{a}}, a \in \mathbb{D} \right\}
+\end{equation}
+
+\begin{equation}
+  \inner{f}{e_a} = \sqrt{1-|a|^2}f(a)
+\end{equation}
+\begin{equation}
+  b_a{z} = \frac{z -a}{1 - z\conj{a}}
+\end{equation}
+
+\begin{equation}
+B_{a,P}(z) = I - P + Pb_a{z}
+\end{equation}
+
+\begin{equation}
+B^{-1}_{a,P}(z) = I - P + P\frac{1}{b_a{z}}
+\end{equation}
+
+\begin{equation}
+  F(z) = P_0F_0(a_0)e_{a_0}(z)\sqrt{1 - |a_0|^2} + B_{a_0,P_0}(z)F_1(z)
+\end{equation}
+
+\begin{equation}
+  F_1(z) = P_1F_1(a_1)e_{a_1}(z)\sqrt{1 - |a_1|^2} + B_{a,P_1}(z)F_2(z)
+\end{equation}
+
+\begin{equation}
+  H_k(z) = F_k(z) - P_kF_k(a_k)e_{a_k}(z)\sqrt{1 - |a_k|^2}
+\end{equation}
+
+\begin{equation}
+  F_{k+1}(z) = B^{-1}_{a_k,P_k}(z)H_k(z)
+\end{equation}
+
+\begin{equation}
+  M_k = P_kF_k(a_k)\sqrt{1-|a_k|^2}
+\end{equation}
+
+\begin{equation}
+  B_k(z) = \left(\prod_{u=0}^{k-1}{B_{a_u,P_u}(z)}\right)P_ke_{a_k}(z)
+\end{equation}
+
+Finally:
+\begin{equation}\label{eq_Bk_decomposition}
+  F(z) = \sum_{k=0}^n{B_k(z)M_k} + \left(\prod_{u=0}^{n}{B_{a_u,P_u}(z)}\right)F_{n+1}(z)
+\end{equation}
+
+\section{VF}
+
+Consider as before approximation problem:
+\begin{equation}\label{eq_VF_problem}
+  F(z) \approx \sum_{k=0}^n{B_k(z)M_k} 
+\end{equation}
+
+In VF solves the problem~\eqref{eq_VF_problem} in two stages.
+\subsection{Pole Identification}
+We introduce a unknown function $\sigma(z)$ of the form:
+\begin{equation}
+  \sigma(z) = \sum_{k=0}^{n} \tilde{c_k}b_{a_k}(z) + 1
+\end{equation}
+Now we seek for a solution of the following:
+\begin{equation}
+  \sum_{k=0}^n{B_k(z)M_k} \approx \left(\sum_{k=0}^{n}\tilde{c_k}b_{a_k}(z) + 1 \right)F(z)
+\end{equation}
+We assume that $F(z)$ is given in a series form:
+\begin{equation}
+  F(z) = \sum_{i=1}^{L} W_i V_i(z)
+\end{equation}
+where, $V_i(z)$ are orthonormal. Otherwise it can be decomposed in a form of Fourier series or AFD,
+which can always be done when there is no restriction on the number of components: $L$.
+Basic idea of the method is to orthogonal decomposition of 
+
+
+    
+  
+Next, the zeros of $(\sigma(z))$ becomes new poles.
+
+\subsection{Residue Identification}
+With fixed set of points $\{a_1, a_2, \ldots, a_n\}$ residue identification is reduced to decomposition~\eqref{eq_Bk_decomposition}
+
+
+\section{Algorithm}
+\section{Conclusions}
+
+\bibliographystyle{IEEEtran}
+
+\bibliography{IEEEabrv,references}
+
+\end{document}
+
