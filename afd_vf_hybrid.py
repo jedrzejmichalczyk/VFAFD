@@ -210,9 +210,13 @@ class HybridAFDVF:
 
 
 def test_function_1(z: np.ndarray) -> np.ndarray:
-    """Test function: Multiple poles inside unit disk"""
-    poles = [0.3 + 0.4j, -0.5 + 0.2j, 0.1 - 0.6j]
-    residues = [1.0 + 0.5j, -0.8 + 1.2j, 0.6 - 0.3j]
+    """
+    Test function: Rational function with poles OUTSIDE unit disk
+    This is a proper H²(D) function.
+    Poles: 1.5+0.5j (|z|=1.58), -1.2+0.8j (|z|=1.44), 2.0-1.0j (|z|=2.24)
+    """
+    poles = [1.5 + 0.5j, -1.2 + 0.8j, 2.0 - 1.0j]
+    residues = [0.5 + 0.2j, -0.3 + 0.4j, 0.4 - 0.1j]
 
     result = np.zeros_like(z, dtype=complex)
     for pole, res in zip(poles, residues):
@@ -221,8 +225,19 @@ def test_function_1(z: np.ndarray) -> np.ndarray:
 
 
 def test_function_2(z: np.ndarray) -> np.ndarray:
-    """Test function: Smooth function in H²"""
+    """
+    Test function: Smooth function in H² with poles outside D
+    1 + 0.5z + 0.3z² = 0 has roots at z ≈ -0.83 ± 1.63i with |z| ≈ 1.83 > 1
+    """
     return 1 / (1 + 0.5*z + 0.3*z**2)
+
+
+def test_function_3(z: np.ndarray) -> np.ndarray:
+    """
+    Test function: Bandlimited-like function (very smooth in H²)
+    All singularities at infinity, exponentially decaying Taylor series
+    """
+    return np.exp(-0.3*z) * np.cos(0.5*z)
 
 
 def run_comparison_experiment(F: Callable, n_poles: int,
@@ -373,12 +388,43 @@ def plot_results(results: dict, experiment_name: str, filename: str):
     return fig
 
 
+def validate_h2_function(F: Callable, name: str):
+    """Check if function appears to be in H²(D) by testing for singularities inside disk"""
+    print(f"\nValidating '{name}' for H²(D) membership...")
+
+    # Test points inside unit disk
+    test_points = [0, 0.3+0.4j, -0.5+0.2j, 0.7-0.3j, 0.6j, -0.8]
+
+    for z in test_points:
+        try:
+            val = F(np.array([z]))[0]
+            if np.isnan(val) or np.isinf(val) or np.abs(val) > 1e10:
+                print(f"  WARNING: Singularity or large value at z={z}: F(z)={val}")
+                print(f"  This function may NOT be in H²(D)!")
+                return False
+        except:
+            print(f"  ERROR: Exception at z={z}")
+            return False
+
+    print(f"  ✓ Function appears valid for H²(D)")
+    return True
+
+
 if __name__ == "__main__":
-    # Experiment 1: Rational function
+    print("="*70)
+    print("HYBRID AFD-VF ALGORITHM - NUMERICAL EXPERIMENTS")
+    print("="*70)
+
+    # Validate test functions
+    validate_h2_function(test_function_1, "Rational Function")
+    validate_h2_function(test_function_2, "Smooth Polynomial")
+    validate_h2_function(test_function_3, "Bandlimited Function")
+
+    # Experiment 1: Rational function with poles outside D
     results1 = run_comparison_experiment(
         test_function_1,
         n_poles=5,
-        experiment_name="Rational Function with 3 Poles"
+        experiment_name="Rational Function (Poles Outside D)"
     )
     plot_results(results1, "Experiment 1: Rational Function", "experiment1.png")
 
@@ -386,10 +432,35 @@ if __name__ == "__main__":
     results2 = run_comparison_experiment(
         test_function_2,
         n_poles=4,
-        experiment_name="Smooth H² Function"
+        experiment_name="Smooth Polynomial Function"
     )
     plot_results(results2, "Experiment 2: Smooth Function", "experiment2.png")
 
-    print("\n" + "="*60)
+    # Experiment 3: Very smooth function
+    results3 = run_comparison_experiment(
+        test_function_3,
+        n_poles=6,
+        experiment_name="Bandlimited Function"
+    )
+    plot_results(results3, "Experiment 3: Bandlimited Function", "experiment3.png")
+
+    # Summary table
+    print("\n" + "="*70)
+    print("SUMMARY OF ALL EXPERIMENTS")
+    print("="*70)
+    print(f"{'Experiment':<30} {'AFD Error':<15} {'Hybrid Error':<15} {'Improvement':>10}")
+    print("-"*70)
+
+    for i, (name, results) in enumerate([
+        ("Rational Function", results1),
+        ("Smooth Polynomial", results2),
+        ("Bandlimited Function", results3)
+    ], 1):
+        afd_err = results['AFD']['error']
+        hyb_err = results['Hybrid']['error']
+        improv = (afd_err - hyb_err) / afd_err * 100
+        print(f"{name:<30} {afd_err:<15.3e} {hyb_err:<15.3e} {improv:>9.1f}%")
+
+    print("\n" + "="*70)
     print("All experiments completed!")
-    print("="*60)
+    print("="*70)

@@ -99,7 +99,7 @@
 \maketitle
 
 \begin{abstract}
-We present a novel hybrid algorithm for rational approximation in the Hardy space $H^2(\mathbb{D})$ that combines Adaptive Fourier Decomposition (AFD) with Vector Fitting (VF) principles. Unlike classical VF which requires solving ill-conditioned linear systems, our method uses only greedy maximization of inner products within the AFD framework. The algorithm consists of two phases: (1) initial AFD decomposition using Blaschke products to obtain an orthogonal basis, and (2) cyclic refinement inspired by VF but avoiding least squares entirely. We prove a decoupling theorem showing that global error minimization separates into independent single-pole optimizations due to basis orthogonality. Numerical experiments demonstrate 20-67\% error reduction compared to pure AFD, with guaranteed numerical stability and no matrix inversions. The method is particularly suitable for microwave filter applications requiring robust pole-residue extraction from frequency response data.
+We present a novel hybrid algorithm for rational approximation in the Hardy space $H^2(\mathbb{D})$ that combines Adaptive Fourier Decomposition (AFD) with Vector Fitting (VF) principles. Unlike classical VF which requires solving ill-conditioned linear systems, our method uses only greedy maximization of inner products within the AFD framework. The algorithm consists of two phases: (1) initial AFD decomposition using Blaschke products to obtain an orthogonal basis, and (2) cyclic refinement inspired by VF but avoiding least squares entirely. We prove a decoupling theorem showing that global error minimization separates into independent single-pole optimizations due to basis orthogonality. Numerical experiments on three function classes reveal that performance is highly dependent on function type: rational functions with distinct poles show up to 70\% error reduction, while very smooth bandlimited functions experience performance degradation. The method maintains guaranteed numerical stability with no matrix inversions. We provide guidelines for when cyclic refinement is beneficial versus when pure AFD is preferable, making the method particularly suitable for microwave filter applications where pole structure is known a priori.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -107,6 +107,12 @@ rational approximation, vector fitting, adaptive Fourier decomposition, Blaschke
 \end{IEEEkeywords}
 
 \section{Introduction}
+
+Rational approximation in the Hardy space $H^2(\mathbb{D})$ is fundamental to signal processing, control theory, and microwave engineering. Two prominent methods exist: Adaptive Fourier Decomposition (AFD) and Vector Fitting (VF). AFD employs greedy selection with orthogonal Blaschke products, guaranteeing numerical stability but potentially suboptimal pole placement. VF uses iterative pole relocation via least squares, achieving better approximations but suffering from ill-conditioned linear systems.
+
+This paper proposes a hybrid approach that combines AFD's greedy maximization framework with VF's cyclic refinement concept, while completely avoiding matrix inversions. The key insight is that for orthogonal Blaschke bases, global error minimization decouples into independent single-pole optimizations (Theorem 1). This enables VF-style refinement using only scalar maximization operations.
+
+We demonstrate that the hybrid method is not universally superior: it excels for rational functions with distinct poles (70\% error reduction) but can degrade performance for very smooth functions (27\% error increase). We provide theoretical analysis and practical guidelines for when each approach is preferable.
 
 \section{AFD}
 \begin{equation}\label{eq:Takenada}
@@ -291,14 +297,19 @@ For moderate $n$ and high accuracy requirements, the hybrid method avoids the il
 
 \section{Numerical Results}
 
-We compare pure AFD with the hybrid AFD-VF method on two test functions in the Hardy space $H^2(\mathbb{D})$.
+We compare pure AFD with the hybrid AFD-VF method on three test functions in the Hardy space $H^2(\mathbb{D})$. All test functions satisfy the requirement that singularities lie outside the closed unit disk.
+
+\subsection{Test Function Selection}
+
+A critical requirement for AFD is that $F \in H^2(\mathbb{D})$, meaning $F$ must be analytic inside $\mathbb{D}$. All poles must satisfy $|a| > 1$:
+
+\begin{enumerate}
+  \item \textbf{Rational function}: $F(z) = \frac{0.5 + 0.2i}{z - (1.5 + 0.5i)} + \frac{-0.3 + 0.4i}{z - (-1.2 + 0.8i)} + \frac{0.4 - 0.1i}{z - (2.0 - 1.0i)}$ with poles at $|a_1| = 1.58$, $|a_2| = 1.44$, $|a_3| = 2.24$ (all outside $\mathbb{D}$)
+  \item \textbf{Smooth polynomial}: $F(z) = 1 / (1 + 0.5z + 0.3z^2)$ with poles at $|a| \approx 1.83$
+  \item \textbf{Bandlimited function}: $F(z) = e^{-0.3z}\cos(0.5z)$ (entire function, all singularities at $\infty$)
+\end{enumerate}
 
 \subsection{Experiment 1: Rational Function}
-
-Test function with three poles:
-\begin{equation}
-  F(z) = \frac{1.0 + 0.5i}{z - (0.3 + 0.4i)} + \frac{-0.8 + 1.2i}{z - (-0.5 + 0.2i)} + \frac{0.6 - 0.3i}{z - (0.1 - 0.6i)}
-\end{equation}
 
 Approximated with $n = 5$ Blaschke products.
 
@@ -309,46 +320,70 @@ Approximated with $n = 5$ Blaschke products.
 \toprule
 Method & Relative Error & Time (s) & Improvement \\
 \midrule
-Pure AFD & $4.81 \times 10^{16}$ & 0.279 & --- \\
-Hybrid AFD-VF & $1.58 \times 10^{16}$ & 2.413 & 67.2\% \\
+Pure AFD & $8.20 \times 10^{-1}$ & 0.133 & --- \\
+Hybrid AFD-VF & $2.45 \times 10^{-1}$ & 1.135 & \textbf{70.1}\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Experiment 2: Smooth Function}
-
-Test function (smooth, not purely rational):
-\begin{equation}
-  F(z) = \frac{1}{1 + 0.5z + 0.3z^2}
-\end{equation}
+\subsection{Experiment 2: Smooth Polynomial}
 
 Approximated with $n = 4$ Blaschke products.
 
 \begin{table}[h]
 \centering
-\caption{Results for Smooth Function Test}
+\caption{Results for Smooth Polynomial Test}
 \begin{tabular}{lccc}
 \toprule
 Method & Relative Error & Time (s) & Improvement \\
 \midrule
-Pure AFD & $3.42 \times 10^{-1}$ & 0.076 & --- \\
-Hybrid AFD-VF & $2.71 \times 10^{-1}$ & 0.628 & 20.8\% \\
+Pure AFD & $3.42 \times 10^{-1}$ & 0.075 & --- \\
+Hybrid AFD-VF & $2.71 \times 10^{-1}$ & 0.633 & 20.8\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Experiment 3: Bandlimited Function}
+
+Approximated with $n = 6$ Blaschke products.
+
+\begin{table}[h]
+\centering
+\caption{Results for Bandlimited Function Test}
+\begin{tabular}{lccc}
+\toprule
+Method & Relative Error & Time (s) & Result \\
+\midrule
+Pure AFD & $1.25 \times 10^{-1}$ & 0.165 & --- \\
+Hybrid AFD-VF & $1.58 \times 10^{-1}$ & 1.378 & $-26.7\%$ (degradation) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Discussion}
 
-The numerical experiments demonstrate that:
+The numerical experiments reveal important characteristics of the hybrid method:
 
 \begin{enumerate}
-  \item \textbf{Consistent improvement}: The hybrid method achieves 20-67\% error reduction across different function types.
-  \item \textbf{No least squares}: Unlike classical VF, no matrix inversion is required, avoiding ill-conditioning.
-  \item \textbf{Convergence}: Cyclic refinement typically converges in 3-5 iterations.
-  \item \textbf{Computational cost}: While refinement adds overhead, the total time remains practical for moderate $n$.
+  \item \textbf{Performance depends on function class}:
+  \begin{itemize}
+    \item Rational functions with distinct poles: 70\% error reduction (excellent)
+    \item Moderately smooth functions: 20\% error reduction (good)
+    \item Very smooth/bandlimited functions: 27\% error \emph{increase} (harmful)
+  \end{itemize}
+
+  \item \textbf{When refinement helps}: For functions with well-separated singularities near the unit circle, cyclic refinement successfully relocates poles to better positions. The initial AFD greedy selection provides good starting points, and refinement finds superior local optima.
+
+  \item \textbf{When refinement hurts}: For very smooth functions (e.g., entire functions or poles far from $\partial\mathbb{D}$), AFD's greedy selection is already near-optimal. Cyclic refinement disrupts the careful greedy ordering, moving poles to suboptimal locations.
+
+  \item \textbf{Computational trade-off}: Hybrid method requires $8-10\times$ more time than pure AFD. This is acceptable when large error reduction is achieved (Experiment 1), but unjustified when performance degrades (Experiment 3).
+
+  \item \textbf{No ill-conditioning}: Unlike classical VF, no matrix inversions occur. All computations remain numerically stable across all experiments.
 \end{enumerate}
 
-Figure~\ref{fig:exp1} and Figure~\ref{fig:exp2} show pole locations and error distributions for both experiments. The hybrid method's poles cluster more effectively around the true singularities of the functions.
+\textbf{Recommendation}: Use hybrid refinement for rational approximation of functions with known or suspected pole structure. For smooth functions without distinct singularities, pure AFD is preferable.
+
+Figure~\ref{fig:exp1}, Figure~\ref{fig:exp2}, and Figure~\ref{fig:exp3} show pole locations and error distributions. For Experiment 1, hybrid poles cluster near true singularities. For Experiment 3, hybrid poles scatter, explaining the performance degradation.
 
 \begin{figure*}[htbp]
 \centering
@@ -360,8 +395,15 @@ Figure~\ref{fig:exp1} and Figure~\ref{fig:exp2} show pole locations and error di
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.9\textwidth]{experiment2.png}
-\caption{Experiment 2: Smooth polynomial function approximated by 4 Blaschke products. Results show consistent improvement with hybrid method achieving 20.8\% error reduction. Pole clustering demonstrates adaptive nature of the refinement process.}
+\caption{Experiment 2: Smooth polynomial function approximated by 4 Blaschke products. Results show moderate improvement with hybrid method achieving 20.8\% error reduction.}
 \label{fig:exp2}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.9\textwidth]{experiment3.png}
+\caption{Experiment 3: Bandlimited function approximated by 6 Blaschke products. This case demonstrates that cyclic refinement can degrade performance for very smooth functions. AFD's greedy selection achieves 12.5\% error while hybrid increases error to 15.8\%, showing refinement is not universally beneficial.}
+\label{fig:exp3}
 \end{figure*}
 
 \section{Conclusions}
@@ -372,11 +414,20 @@ The method offers several advantages:
 \begin{itemize}
   \item Avoids ill-conditioned linear systems inherent in classical VF
   \item Maintains orthogonality of Blaschke product basis
-  \item Achieves superior approximation accuracy through iterative refinement
   \item Provides theoretical guarantees via the decoupling property
+  \item Maintains numerical stability across all function classes
 \end{itemize}
 
-Future work includes extending the method to matrix-valued functions (relevant for microwave filter coupling matrix extraction) and analyzing convergence rates under different function classes.
+However, numerical experiments reveal that cyclic refinement is \emph{not universally beneficial}:
+\begin{itemize}
+  \item \textbf{Effective for}: Rational functions with well-separated poles near $\partial\mathbb{D}$ (70\% error reduction)
+  \item \textbf{Moderately effective for}: Smooth functions with poles moderately outside $\mathbb{D}$ (20\% error reduction)
+  \item \textbf{Ineffective or harmful for}: Very smooth/bandlimited functions (up to 27\% error increase)
+\end{itemize}
+
+The practical guideline is: use cyclic refinement when the target function is known or suspected to have distinct pole structure (e.g., microwave filters, rational transfer functions). For smooth approximation tasks without clear singularities, pure AFD is preferable.
+
+Future work includes: (1) adaptive criteria to automatically decide whether to apply refinement, (2) extension to matrix-valued functions for MIMO systems and coupling matrix extraction, (3) theoretical analysis of convergence rates for different function classes, and (4) investigation of alternative refinement strategies that preserve AFD's greedy optimality for smooth functions.
 
 \bibliographystyle{IEEEtran}
 

@@ -56,18 +56,28 @@ python3 afd_vf_hybrid.py
 ```
 
 This will:
-- Run two numerical experiments
-- Generate comparison plots (experiment1.png, experiment2.png)
-- Print performance metrics
+- Validate test functions for H²(D) membership (poles must be outside unit disk!)
+- Run three numerical experiments
+- Generate comparison plots (experiment1.png, experiment2.png, experiment3.png)
+- Print comprehensive performance metrics and summary table
 
 ## Results Summary
 
-| Experiment | Method | Relative Error | Improvement |
-|------------|--------|---------------|-------------|
-| Rational Function | Pure AFD | 4.81×10¹⁶ | - |
-| Rational Function | Hybrid | 1.58×10¹⁶ | **67.2%** |
-| Smooth Function | Pure AFD | 3.42×10⁻¹ | - |
-| Smooth Function | Hybrid | 2.71×10⁻¹ | **20.8%** |
+**IMPORTANT:** Performance is highly dependent on function class!
+
+| Experiment | Pure AFD Error | Hybrid Error | Result |
+|------------|----------------|--------------|---------|
+| Rational Function (poles outside D) | 82.0% | **24.5%** | ✅ **70% improvement** |
+| Smooth Polynomial | 34.2% | 27.1% | ✅ 21% improvement |
+| Bandlimited Function | 12.5% | 15.8% | ❌ **27% degradation** |
+
+### Key Findings
+
+1. **When Hybrid Excels**: Rational functions with well-separated poles → 70% error reduction
+2. **When Hybrid Helps Moderately**: Smooth functions with moderate pole separation → 21% error reduction
+3. **When Hybrid Hurts**: Very smooth/bandlimited functions → 27% error increase!
+
+**Recommendation**: Use hybrid refinement only for functions with known distinct pole structure (e.g., microwave filters). For smooth approximation, stick with pure AFD.
 
 ## Algorithm Complexity
 
