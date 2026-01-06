@@ -42,6 +42,8 @@
 \usepackage{xcolor}
 \usepackage{amsmath}% for double integral symbol in this template
 \usepackage{amssymb}% for double integral symbol in this template
+\usepackage{amsthm}% for theorem and proof environments
+\newtheorem{theorem}{Theorem}
 \usepackage{graphicx}% for figures
 \usepackage{tikz,pgfplots}% for figures
 \pgfplotsset{compat=1.16}
@@ -218,12 +220,12 @@ We begin with standard AFD to obtain an initial set of poles $\{a_0, a_1, \ldots
 \begin{algorithm}[H]
 \caption{Initial AFD Decomposition}
 \begin{algorithmic}
-\STATE Initialize $F_0(z) = F(z)$
-\FOR{$k = 0$ to $n-1$}
-    \STATE Find optimal pole: $a_k = \arg\max_{a \in \mathbb{D}} \left|\inner{F_k}{e_a}\right| = \arg\max_{a \in \mathbb{D}} \sqrt{1-|a|^2}|F_k(a)|$
-    \STATE Compute residue: $M_k = P_k F_k(a_k)\sqrt{1-|a_k|^2}$
-    \STATE Update residual: $F_{k+1}(z) = B^{-1}_{a_k,P_k}(z)\left[F_k(z) - B_k(z)M_k\right]$
-\ENDFOR
+\State Initialize $F_0(z) = F(z)$
+\For{$k = 0$ to $n-1$}
+    \State Find optimal pole: $a_k = \arg\max_{a \in \mathbb{D}} \left|\inner{F_k}{e_a}\right| = \arg\max_{a \in \mathbb{D}} \sqrt{1-|a|^2}|F_k(a)|$
+    \State Compute residue: $M_k = P_k F_k(a_k)\sqrt{1-|a_k|^2}$
+    \State Update residual: $F_{k+1}(z) = B^{-1}_{a_k,P_k}(z)\left[F_k(z) - B_k(z)M_k\right]$
+\EndFor
 \end{algorithmic}
 \end{algorithm}
 
@@ -256,14 +258,14 @@ This theorem enables the following cyclic refinement algorithm:
 \begin{algorithm}[H]
 \caption{Cyclic Refinement (No Least Squares)}
 \begin{algorithmic}
-\REPEAT
-    \FOR{$j = 0$ to $n-1$}
-        \STATE Compute partial residual: $\tilde{F}_j(z) = F(z) - \sum_{k \neq j} B_k(z)M_k$
-        \STATE Re-optimize pole: $a_j = \arg\max_{a \in \mathbb{D}} \sqrt{1-|a|^2}|\tilde{F}_j(a)|$
-        \STATE Recompute residue: $M_j = P_j \tilde{F}_j(a_j)\sqrt{1-|a_j|^2}$
-        \STATE Update all $B_k$ that depend on $a_j$ (for $k \geq j$)
-    \ENDFOR
-\UNTIL{convergence or maximum iterations reached}
+\Repeat
+    \For{$j = 0$ to $n-1$}
+        \State Compute partial residual: $\tilde{F}_j(z) = F(z) - \sum_{k \neq j} B_k(z)M_k$
+        \State Re-optimize pole: $a_j = \arg\max_{a \in \mathbb{D}} \sqrt{1-|a|^2}|\tilde{F}_j(a)|$
+        \State Recompute residue: $M_j = P_j \tilde{F}_j(a_j)\sqrt{1-|a_j|^2}$
+        \State Update all $B_k$ that depend on $a_j$ (for $k \geq j$)
+    \EndFor
+\Until{convergence or maximum iterations reached}
 \end{algorithmic}
 \end{algorithm}
 
