@@ -108,17 +108,19 @@ rational approximation, vector fitting, adaptive Fourier decomposition, Blaschke
 
 \section{Introduction}
 
-Rational approximation in the Hardy space $H^2(\mathbb{D})$ is fundamental to signal processing, control theory, and microwave engineering. Two prominent methods exist: Adaptive Fourier Decomposition (AFD) and Vector Fitting (VF). AFD employs greedy selection with orthogonal Blaschke products, guaranteeing numerical stability but potentially suboptimal pole placement. VF uses iterative pole relocation via least squares, achieving better approximations but suffering from ill-conditioned linear systems.
+Rational approximation in the Hardy space $H^2(\mathbb{D})$ is fundamental to signal processing, control theory, and microwave engineering~\cite{partington2004interpolation}. Two prominent methods exist: Adaptive Fourier Decomposition (AFD)~\cite{qian2013adaptive} and Vector Fitting (VF)~\cite{gustavsen1999rational}. AFD employs greedy selection with orthogonal Blaschke products, guaranteeing numerical stability but potentially suboptimal pole placement. VF uses iterative pole relocation via least squares, achieving better approximations but suffering from ill-conditioned linear systems~\cite{gustavsen2006improving,deschrijver2008macromodeling}.
 
 This paper proposes a hybrid approach that combines AFD's greedy maximization framework with VF's cyclic refinement concept, while completely avoiding matrix inversions. The key insight is that for orthogonal Blaschke bases, global error minimization decouples into independent single-pole optimizations (Theorem 1). This enables VF-style refinement using only scalar maximization operations.
 
 We demonstrate that the hybrid method is not universally superior: it excels for rational functions with distinct poles (70\% error reduction) but can degrade performance for very smooth functions (27\% error increase). We provide theoretical analysis and practical guidelines for when each approach is preferable.
 
 \section{AFD}
+
+The Adaptive Fourier Decomposition~\cite{qian2013adaptive} uses orthogonal Blaschke products to decompose functions in the Hardy space $H^2(\mathbb{D})$. The basis functions are given by:
 \begin{equation}\label{eq:Takenada}
   B_{n} = \frac{\sqrt{1 - |a_n|^2}}{1 - z\conj{a_n}}\prod_{k=1}^{n-1}{\frac{z - a_k}{1 - z\conj{a}}}
 \end{equation}
-System from~\eqref{eq:Takenada} is called the Takenada-Malmquist system.
+System from~\eqref{eq:Takenada} is called the Takenada-Malmquist system~\cite{takenaka1925orthogonal,malmquist1925etude}.
 \begin{equation}\label{eq:fproj}
   f = \sum_{k=1}^{\infty} \inner{f_k}{u_k} u_k
 \end{equation}
@@ -173,7 +175,7 @@ Finally:
 
 \section{VF}
 
-Consider as before approximation problem:
+The Vector Fitting method~\cite{gustavsen1999rational,gustavsen2006improving} solves the approximation problem:
 \begin{equation}\label{eq_VF_problem}
   F(z) \approx \sum_{k=0}^n{B_k(z)M_k} 
 \end{equation}
@@ -267,7 +269,7 @@ This theorem enables the following cyclic refinement algorithm:
 
 \subsection{Comparison with Classical VF}
 
-The hybrid method differs fundamentally from classical Vector Fitting:
+The hybrid method differs fundamentally from classical Vector Fitting~\cite{gustavsen1999rational}:
 
 \begin{table}[h]
 \centering
