@@ -1,0 +1,71 @@
+name: Compile LaTeX Paper
+
+on:
+  push:
+    branches:
+      - main
+      - claude/**
+    paths:
+      - 'paper.tex'
+      - '*.tex'
+      - '*.bib'
+      - 'experiment*.png'
+      - '.github/workflows/compile-latex.yml'
+  pull_request:
+    paths:
+      - 'paper.tex'
+      - '*.tex'
+      - '*.bib'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Compile LaTeX document
+      uses: xu-cheng/latex-action@v3
+      with:
+        root_file: paper.tex
+        args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+
+    - name: Upload PDF as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: paper-pdf
+        path: paper.pdf
+        retention-days: 90
+
+    - name: Create output directory
+      run: mkdir -p pdf-output
+
+    - name: Copy PDF to output
+      run: cp paper.pdf pdf-output/hybrid-afd-vf-paper.pdf
+
+    - name: Upload to GitHub Pages branch (if main branch)
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./pdf-output
+        publish_branch: gh-pages
+        force_orphan: true
+
+    - name: Comment on PR with PDF link
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const message = `📄 **Paper PDF compiled successfully!**
+
+          Download the compiled PDF from the [workflow artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).`;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: message
+          });

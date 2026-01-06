@@ -1,6 +1,10 @@
 # Hybrid AFD-VF for Rational Approximation
 
+[![Compile LaTeX](https://github.com/jedrzejmichalczyk/VFAFD/actions/workflows/compile-latex.yml/badge.svg)](https://github.com/jedrzejmichalczyk/VFAFD/actions/workflows/compile-latex.yml)
+
 This repository contains the implementation and manuscript for a novel hybrid algorithm combining Adaptive Fourier Decomposition (AFD) with Vector Fitting (VF) for rational approximation in Hardy spaces.
+
+**📄 [Download Latest Paper PDF](https://github.com/jedrzejmichalczyk/VFAFD/actions/workflows/compile-latex.yml)** (Click on latest run → Artifacts → paper-pdf)
 
 ## Overview
 
