@@ -524,3 +524,7 @@ Plots/*
 ~*
 latexmk.pl
 eig_perturb1.png
+
+## Python
+__pycache__/
+*.pyc
